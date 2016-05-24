@@ -1,0 +1,21 @@
+{% extends 'betting/base.html' %}
+
+{% block body %}
+{% if all_bets %}
+    <h3>My Bets</h3>
+    <ul>
+        {% for bet in all_bets %}
+            <li><h4> {{bet.awayteam}}@{{bet.hometeam}} </h4>
+            <h5>Pick: {{bet.betpick}} 
+            <h5>{{ bet.pickToString }} 
+            <h5>Odds: {{bet.oddsToString}}
+            <h5>Wager: ${{bet.wager}} to win ${{bet.winAmount}}
+            <br><br>
+            </h5>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <h3>No Current Bets Placed</h3>
+{% endif %}
+{% endblock %}

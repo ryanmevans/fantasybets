@@ -1,0 +1,14 @@
+{% extends 'betting/base.html' %}
+
+{% block body %}
+{% if all_games %}
+    <h3>Here are upcoming games</h3>
+    <ul>
+        {% for game in all_games %}
+            <li><a href="{% url 'betting:detail' game.id%}">{{game.hometeam}}@{{game.awayteam}}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <h3>No Upcoming Games</h3>
+{% endif %}
+{% endblock %}
