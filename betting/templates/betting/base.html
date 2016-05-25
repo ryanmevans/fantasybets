@@ -37,8 +37,17 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li class="">
-                    <a href="#">Logout</a>
+                {% if user.is_authenticated %}
+                <p class="navbar-text"> Welcome, {{ user.username }}:{{user.id}}:${{user.better.balance}}</p><li class="">
+                    <li class="">
+                        <a href="{% url 'betting:logout_user' %}">Logout</a>
+                    </li>
+                {% else %}
+                <p class="navbar-text"> Welcome, Guest</p>
+                    <li class=""> 
+                        <a href="{% url 'betting:login_user' %}">Login</a>
+                    </li>
+                {% endif %}
                 </li>
             </ul>
         </div>

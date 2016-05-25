@@ -2,7 +2,22 @@ from __future__ import unicode_literals
 import datetime
 import time
 from django.db import models
+from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
+
+class Better(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    balance = models.FloatField(default=50000.00)
+
+    def __str__(self):
+        return self.user
+
+def create_better(sender, instance, created, **kwargs):
+    if created:
+        Better.objects.create(user=instance)
+
+post_save.connect(create_better, sender=User)
 
 class Game(models.Model):
     hometeam = models.CharField(max_length=70)
@@ -24,14 +39,11 @@ class Bet(models.Model):
     betvalue = models.IntegerField()
     userId = models.IntegerField()
     odds = models.IntegerField()
-    hometeam = models.CharField(max_length=70)
-    awayteam = models.CharField(max_length=70)
-    gamedate = models.DateTimeField()
     betpick = models.CharField(max_length=70)
     paid = models.BooleanField(default=False)
 
     def __str__(self):
-        retstr = self.awayteam+'@'+self.hometeam+' '+'Pick: '+self.betpick
+        retstr = str(self.game) + ' - Pick: '+self.betpick
         return retstr
 
     def get_absolute_url(self):
@@ -47,6 +59,9 @@ class Bet(models.Model):
             win = float(self.wager) * (100/float(-(self.odds)))
             win = round(win, 2)
             return win
+
+        else:
+            return wager
 
     def betTypeString(self):
         if self.type == "overunder":

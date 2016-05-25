@@ -1,11 +1,13 @@
 {% extends 'betting/base.html' %}
 
 {% block body %}
+<div class="container-fluid songs-container">
 {% if all_bets %}
-    <h3>My Bets</h3>
+    <div><h3>My Bets</h3></div>
     <ul>
         {% for bet in all_bets %}
-            <li><h4> {{bet.awayteam}}@{{bet.hometeam}} </h4>
+        {% if user.id == bet.userId and bet.paid == False %}
+            <li><h4> {{bet.game}} </h4>
             <h5>Pick: {{bet.betpick}} 
             <h5>{{ bet.pickToString }} 
             <h5>Odds: {{bet.oddsToString}}
@@ -13,9 +15,11 @@
             <br><br>
             </h5>
             </li>
+        {% endif %}
         {% endfor %}
     </ul>
 {% else %}
     <h3>No Current Bets Placed</h3>
 {% endif %}
+</div>
 {% endblock %}
